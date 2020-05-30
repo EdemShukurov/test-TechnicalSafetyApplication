@@ -13,9 +13,18 @@ namespace TechnicalSafetyApplication.Controllers
     {
         private UserManager<AppUser> _userManager;
 
-        public AdminController(UserManager<AppUser> userManager)
+        private IUserValidator<AppUser> _userValidator;
+        private IPasswordValidator<AppUser> _passwordValidator;
+        private IPasswordHasher<AppUser> _passwordHasher;
+
+        public AdminController(UserManager<AppUser> userManager,
+            IUserValidator<AppUser> userValidator, IPasswordValidator<AppUser> passwordValidator, IPasswordHasher<AppUser> passwordHasher)
         {
             _userManager = userManager;
+
+            _userValidator = userValidator;
+            _passwordHasher = passwordHasher;
+            _passwordValidator = passwordValidator;
         }
 
         public IActionResult Index()
@@ -31,7 +40,7 @@ namespace TechnicalSafetyApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateViewModel createViewModel)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 AppUser user = new AppUser
                 {
@@ -41,20 +50,86 @@ namespace TechnicalSafetyApplication.Controllers
 
                 IdentityResult result = await _userManager.CreateAsync(user, createViewModel.Password);
 
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    foreach (IdentityError error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
+                    AddErrorsFromResult(result);
                 }
             }
 
             return View(createViewModel);
+        }
+
+        // Get request
+        public async Task<IActionResult> Edit(string id)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+
+            if (user != null)
+            {
+                return View(user);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, string email, string password)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+
+            if (user != null)
+            {
+                //check email
+                user.Email = email;
+                IdentityResult validEmail = await _userValidator.ValidateAsync(_userManager, user);
+
+                if(validEmail.Succeeded == false)
+                {
+                    AddErrorsFromResult(validEmail);
+                }
+
+                IdentityResult validPassword = null;
+                if (string.IsNullOrEmpty(password) == false)
+                {
+                    //check password
+                    validPassword = await _passwordValidator.ValidateAsync(_userManager, user, password);
+
+                    if(validPassword.Succeeded)
+                    {
+                        // ASP.Net Core Identity saves password's hash, not password's value
+                        user.PasswordHash = _passwordHasher.HashPassword(user, password);
+                    }
+                    else
+                    {
+                        AddErrorsFromResult(validPassword);
+                    }
+                }
+
+                if(validEmail.Succeeded && (validPassword == null || (password != string.Empty && validPassword.Succeeded)))
+                {
+                    //
+                    var result = await _userManager.UpdateAsync(user);
+
+                    if(result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        AddErrorsFromResult(result);
+                    }
+                }      
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "User not found");
+            }
+
+            return View(user);
         }
 
         [HttpPost]
@@ -77,7 +152,7 @@ namespace TechnicalSafetyApplication.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "User not found");                
+                ModelState.AddModelError(string.Empty, "User not found");                
             }
 
             return View(nameof(Index), _userManager.Users);
@@ -87,7 +162,7 @@ namespace TechnicalSafetyApplication.Controllers
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error.Description);
+                ModelState.AddModelError(string.Empty, error.Description);
             }
         }
     }

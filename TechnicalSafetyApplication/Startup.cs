@@ -40,7 +40,7 @@ namespace TechnicalSafetyApplication
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+                //options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
                 options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireLowercase = false;
