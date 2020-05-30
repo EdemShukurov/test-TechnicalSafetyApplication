@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Application>
+
+@foreach (var app in Model)
+{
+    <div>
+        <h3>@app.Theme</h3>
+        <p>@app.Message</p>
+        
+    </div>
+}
