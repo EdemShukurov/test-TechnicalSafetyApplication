@@ -56,5 +56,39 @@ namespace TechnicalSafetyApplication.Controllers
 
             return View(createViewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+
+            if(user != null)
+            {
+                IdentityResult result = await _userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    AddErrorsFromResult(result);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "User not found");                
+            }
+
+            return View(nameof(Index), _userManager.Users);
+        }
+
+        private void AddErrorsFromResult(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+        }
     }
 }
