@@ -30,10 +30,12 @@ namespace TechnicalSafetyApplication.Models
 
         public AppUser User { get; set; }
 
+        public int? ReplyId { get; set; }
 
-        [ForeignKey(nameof(Models.Reply))]
-        public int ReplyId { get; set; }
-
-        public Reply Reply { get; set; }
+        public Application()
+        {
+            this.CreationTime = DateTime.UtcNow;
+            this.ModificationTime = DateTime.UtcNow;
+        }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TechnicalSafetyApplication.Models;
 
@@ -21,7 +23,12 @@ namespace TechnicalSafetyApplication.Controllers
         // GET: Application
         public async Task<IActionResult> Index()
         {
-            var appIdentityDbContext = _context.Claims.Include(a => a.Reply).Include(a => a.User);
+            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var userId = new SqlParameter("@userId", User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var list = _context.Claims.FromSqlRaw("EXECUTE GetApplicationsByUserId @userId", userId).ToList();
+
+            var appIdentityDbContext = _context.Claims.Include(a => a.User);
             return View(await appIdentityDbContext.ToListAsync());
         }
 
@@ -33,8 +40,7 @@ namespace TechnicalSafetyApplication.Controllers
                 return NotFound();
             }
 
-            var application = await _context.Claims
-                .Include(a => a.Reply)
+            var application = await _context.Claims                
                 .Include(a => a.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (application == null)
@@ -135,7 +141,6 @@ namespace TechnicalSafetyApplication.Controllers
             }
 
             var application = await _context.Claims
-                .Include(a => a.Reply)
                 .Include(a => a.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (application == null)

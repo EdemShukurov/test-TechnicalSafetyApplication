@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TechnicalSafetyApplication.Models
 {
-
     public class Reply
     {
         public int Id { get; set; }
@@ -13,6 +12,11 @@ namespace TechnicalSafetyApplication.Models
         public DateTime CreationTime { get; set; }
 
         public DateTime? ModificationTime { get; set; }
+
+        //[ForeignKey(nameof(Application))]
+        //public int ClaimId { get; set; }
+
+        //public Application Claim { get; set; }
 
 
         [ForeignKey(nameof(AppUser))]

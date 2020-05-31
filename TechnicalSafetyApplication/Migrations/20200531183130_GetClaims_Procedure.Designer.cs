@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechnicalSafetyApplication.Models;
 
 namespace TechnicalSafetyApplication.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    partial class AppIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200531183130_GetClaims_Procedure")]
+    partial class GetClaims_Procedure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,7 +242,7 @@ namespace TechnicalSafetyApplication.Migrations
                     b.Property<DateTime?>("ModificationTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ReplyId")
+                    b.Property<int>("ReplyId")
                         .HasColumnType("int");
 
                     b.Property<string>("Theme")
@@ -250,6 +252,8 @@ namespace TechnicalSafetyApplication.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReplyId");
 
                     b.HasIndex("UserId");
 
@@ -359,6 +363,12 @@ namespace TechnicalSafetyApplication.Migrations
 
             modelBuilder.Entity("TechnicalSafetyApplication.Models.Application", b =>
                 {
+                    b.HasOne("TechnicalSafetyApplication.Models.Reply", "Reply")
+                        .WithMany()
+                        .HasForeignKey("ReplyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TechnicalSafetyApplication.Models.AppUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
