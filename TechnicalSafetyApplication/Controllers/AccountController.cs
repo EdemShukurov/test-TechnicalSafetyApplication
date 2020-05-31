@@ -55,5 +55,18 @@ namespace TechnicalSafetyApplication.Controllers
 
             return View(details);
         }
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Index),"Home");
+        }
+
+        [AllowAnonymous]
+        public IActionResult AccessDenies()
+        {
+            return View();
+        }
     }
 }
