@@ -14,8 +14,8 @@ namespace TechnicalSafetyApplication.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private UserManager<AppUser> _userManager;
-        private SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
@@ -27,7 +27,7 @@ namespace TechnicalSafetyApplication.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.ReturnUrl = returnUrl + "application";
             return View();
         }
 
@@ -47,11 +47,11 @@ namespace TechnicalSafetyApplication.Controllers
 
                     if(result.Succeeded)
                     {
-                        return Redirect(returnUrl ?? "/");
+                        return Redirect(returnUrl ?? "/application");
                     }
                 }
 
-                ModelState.AddModelError(nameof(LoginViewModel.Email), "Invalid User or password");
+                ModelState.AddModelError(nameof(LoginViewModel.Email), "Invalid user or password");
             }
 
             return View(details);
