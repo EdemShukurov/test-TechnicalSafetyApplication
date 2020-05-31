@@ -85,7 +85,8 @@ namespace TechnicalSafetyApplication
                 routes.MapRoute(name: "default", template: "{controller=Application}/{action=List}/{id?}");
             });   
             
-            AppIdentityDbContext.CreateAdminAccount(app.ApplicationServices, _configurationRoot).Wait();
+            // need to comment it when we need to create database, then uncomment
+            //AppIdentityDbContext.CreateAdminAccount(app.ApplicationServices, _configurationRoot).Wait();
         }
     }
 }
