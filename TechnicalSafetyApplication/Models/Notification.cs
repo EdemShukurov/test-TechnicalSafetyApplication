@@ -20,9 +20,9 @@ namespace TechnicalSafetyApplication.Models
         public AppUser User { get; set; }
 
 
-        [ForeignKey(nameof(Models.Claim))]
+        [ForeignKey(nameof(Models.Application))]
         public int ClaimId { get; set; }
 
-        public Claim Claim { get; set; }
+        public Application Claim { get; set; }
     }
 }

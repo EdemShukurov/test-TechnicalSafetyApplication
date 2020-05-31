@@ -10,7 +10,7 @@ namespace TechnicalSafetyApplication.Models
         Processed
     }
 
-    public class Claim
+    public class Application
     {
         public int Id { get; set; }
 

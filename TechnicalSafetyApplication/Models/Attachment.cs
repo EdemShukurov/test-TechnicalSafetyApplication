@@ -23,6 +23,6 @@ namespace TechnicalSafetyApplication.Models
         // foreign key
         public int ClaimId { get; set; }
 
-        public Claim Claim { get; set; }
+        public Application Claim { get; set; }
     }
 }
