@@ -78,7 +78,7 @@ namespace TechnicalSafetyApplication
             //    });
             //});
 
-            //app.UseMvcWithDefaultRoute();
+            app.UseMvcWithDefaultRoute();
 
             app.UseMvc(routes =>
             {
