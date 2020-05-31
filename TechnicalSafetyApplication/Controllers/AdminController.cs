@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TechnicalSafetyApplication.Models;
@@ -9,6 +10,7 @@ using TechnicalSafetyApplication.Models.ViewModels;
 
 namespace TechnicalSafetyApplication.Controllers
 {
+    [Authorize(Roles = "Admins")]
     public class AdminController : Controller
     {
         private UserManager<AppUser> _userManager;

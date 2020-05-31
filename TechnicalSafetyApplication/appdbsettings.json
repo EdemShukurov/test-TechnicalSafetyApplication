@@ -1,4 +1,21 @@
 {
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+
+  "Data": {
+    "AdminUser": {
+      "Name": "Admin",
+      "Email": "admin@example.com",
+      "Password": "password123",
+      "Role": "Admins"
+    }
+  },
   "ConnectionStrings": {
     "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TechnicalSafetyDb;Trusted_Connection=True;MultipleActiveResultSets=true"
   }

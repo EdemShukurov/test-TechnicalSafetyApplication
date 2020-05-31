@@ -83,7 +83,9 @@ namespace TechnicalSafetyApplication
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "default", template: "{controller=Application}/{action=List}/{id?}");
-            });           
+            });   
+            
+            AppIdentityDbContext.CreateAdminAccount(app.ApplicationServices, _configurationRoot).Wait();
         }
     }
 }
