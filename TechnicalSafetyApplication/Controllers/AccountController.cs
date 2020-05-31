@@ -47,7 +47,17 @@ namespace TechnicalSafetyApplication.Controllers
 
                     if(result.Succeeded)
                     {
-                        return Redirect(returnUrl ?? "/application");
+                        var roles = await _userManager.GetRolesAsync(user);
+
+                        if (roles.Contains("Admins"))
+                        {
+                            return Redirect(returnUrl ?? "/admin");
+                        }
+                        else
+                        {
+                            return Redirect(returnUrl ?? "/application");
+                        }
+                        
                     }
                 }
 
