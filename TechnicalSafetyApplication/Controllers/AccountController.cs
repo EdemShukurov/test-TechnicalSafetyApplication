@@ -23,10 +23,11 @@ namespace TechnicalSafetyApplication.Controllers
             _signInManager = signInManager;
         }
 
+        [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl)
+        public IActionResult Login(string returnUrl = null)
         {
-            ViewBag.returnUrl = returnUrl;
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
