@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TechnicalSafetyApplication.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,7 +39,9 @@ namespace TechnicalSafetyApplication.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    City = table.Column<int>(nullable: false),
+                    Qualifications = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -152,6 +154,80 @@ namespace TechnicalSafetyApplication.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Replies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Message = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    ModificationTime = table.Column<DateTime>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Replies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Replies_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Claims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Message = table.Column<string>(nullable: true),
+                    Theme = table.Column<string>(nullable: true),
+                    CurrentStatus = table.Column<byte>(nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    ModificationTime = table.Column<DateTime>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    ReplyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Claims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Claims_Replies_ReplyId",
+                        column: x => x.ReplyId,
+                        principalTable: "Replies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Claims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Attachments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nvarchar50 = table.Column<string>(name: "nvarchar(50)", nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    ClaimId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attachments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attachments_Claims_ClaimId",
+                        column: x => x.ClaimId,
+                        principalTable: "Claims",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -190,6 +266,26 @@ namespace TechnicalSafetyApplication.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attachments_ClaimId",
+                table: "Attachments",
+                column: "ClaimId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Claims_ReplyId",
+                table: "Claims",
+                column: "ReplyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Claims_UserId",
+                table: "Claims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Replies_UserId",
+                table: "Replies",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -210,7 +306,16 @@ namespace TechnicalSafetyApplication.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Attachments");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Claims");
+
+            migrationBuilder.DropTable(
+                name: "Replies");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

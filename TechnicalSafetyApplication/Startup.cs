@@ -23,7 +23,7 @@ namespace TechnicalSafetyApplication
         public Startup(IWebHostEnvironment hostingEnvironment)
         {
             _configurationRoot = new ConfigurationBuilder().SetBasePath(hostingEnvironment.ContentRootPath)
-                                                           .AddJsonFile("appdbsettings.json")
+                                                           .AddJsonFile("appsettings.json")
                                                            .Build();
         }
 
@@ -86,7 +86,7 @@ namespace TechnicalSafetyApplication
             });   
             
             // need to comment it when we need to create database, then uncomment
-            //AppIdentityDbContext.CreateAdminAccount(app.ApplicationServices, _configurationRoot).Wait();
+            AppIdentityDbContext.CreateAdminAccount(app.ApplicationServices, _configurationRoot).GetAwaiter().GetResult();
         }
     }
 }
