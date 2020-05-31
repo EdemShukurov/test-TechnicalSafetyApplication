@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TechnicalSafetyApplication.Models
 {
@@ -9,7 +10,7 @@ namespace TechnicalSafetyApplication.Models
         Processed
     }
 
-    public class Application
+    public class Claim
     {
         public int Id { get; set; }
 
@@ -24,11 +25,13 @@ namespace TechnicalSafetyApplication.Models
         public DateTime? ModificationTime { get; set; }
 
 
-        // Foreign keys
-        public int UserId { get; set; }
+        [ForeignKey(nameof(AppUser))]
+        public string UserId { get; set; }
 
-        public User User { get; set; }
+        public AppUser User { get; set; }
 
+
+        [ForeignKey(nameof(Models.Reply))]
         public int ReplyId { get; set; }
 
         public Reply Reply { get; set; }

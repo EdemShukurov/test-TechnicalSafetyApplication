@@ -1,4 +1,6 @@
-﻿namespace TechnicalSafetyApplication.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TechnicalSafetyApplication.Models
 {
     public enum NotificationType : byte
     {
@@ -12,13 +14,15 @@
 
         public NotificationType Type { get; set; }
 
-        // Foreign keys
-        public int UserId { get; set; }
 
-        public User User { get; set; }
+        [ForeignKey(nameof(AppUser))]
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
-        public int ApplicationId { get; set; }
 
-        public Application Application { get; set; }
+        [ForeignKey(nameof(Models.Claim))]
+        public int ClaimId { get; set; }
+
+        public Claim Claim { get; set; }
     }
 }

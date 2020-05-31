@@ -45,5 +45,11 @@ namespace TechnicalSafetyApplication.Models
                 }
             }
         }
+
+        public DbSet<Attachment> Attachments { get; set; }
+
+        public DbSet<Claim> Claims { get; set; }
+
+        public DbSet<Reply> Replies { get; set; }
     }
 }

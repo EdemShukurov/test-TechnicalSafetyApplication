@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TechnicalSafetyApplication.Models
 {
@@ -14,9 +15,9 @@ namespace TechnicalSafetyApplication.Models
         public DateTime? ModificationTime { get; set; }
 
 
-        // Foreign key to user
-        public int UserId { get; set; }
+        [ForeignKey(nameof(AppUser))]
+        public string UserId { get; set; }
 
-        public User User { get; set; }
+        public AppUser User { get; set; }
     }
 }
