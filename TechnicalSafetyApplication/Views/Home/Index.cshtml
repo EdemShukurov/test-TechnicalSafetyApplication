@@ -12,13 +12,23 @@
     }
 </table>
 
-@if (User != null && User.IsInRole("Admins")== false)
+@if (User != null)
 {
-    <a asp-controller="Application" asp-action="Index" class="btn btn-danger">Your applications</a>
+    @if (User.IsInRole(Utility.ADMINS_ROLE) == false)
+    {
+        <a asp-controller="Application" asp-action="Index" class="btn btn-danger">Your applications</a>
+    }
+    else    
+    {
+        <a asp-controller="RoleAdmin" asp-action="Index" class="btn btn-warning">Roles</a>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-warning">Users</a>
+        <br /><br /><br />
+    }
+
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
+    }
 }
 
 
-@if (User?.Identity?.IsAuthenticated ?? false)
-{
-    <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
-}

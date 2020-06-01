@@ -9,7 +9,7 @@ using TechnicalSafetyApplication.Models.ViewModels;
 
 namespace TechnicalSafetyApplication.Controllers
 {
-    [Authorize(Roles = "Admins")]
+    [Authorize(Roles = Utility.ADMINS_ROLE)]
     public class RoleAdminController : Controller
     {
         private RoleManager<IdentityRole> _roleManager;

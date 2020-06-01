@@ -63,7 +63,7 @@ namespace TechnicalSafetyApplication.Controllers
                 ["User"] = HttpContext.User.Identity.Name,
                 //["Authenticated"] = HttpContext.User.Identity.IsAuthenticated,
                 ["Auth Type"] = HttpContext.User.Identity.AuthenticationType,
-                ["Is Employees Role"] = HttpContext.User.IsInRole("Employees"),
+                ["Is Employees Role"] = HttpContext.User.IsInRole(Utility.EMPLOYEES_ROLE),
                 //["City"] = CurrentUser.Result.City,
                 //["Qualification"] = CurrentUser.Result.Qualifications
             };
