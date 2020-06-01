@@ -12,6 +12,12 @@
     }
 </table>
 
+@if (User != null && User.IsInRole("Admins")== false)
+{
+    <a asp-controller="Application" asp-action="Index" class="btn btn-danger">Your applications</a>
+}
+
+
 @if (User?.Identity?.IsAuthenticated ?? false)
 {
     <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>

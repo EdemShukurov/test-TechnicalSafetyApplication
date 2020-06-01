@@ -59,13 +59,13 @@ namespace TechnicalSafetyApplication.Controllers
         {
             return new Dictionary<string, object>
             {
-                ["Action"] = actionName,
+                //["Action"] = actionName,
                 ["User"] = HttpContext.User.Identity.Name,
-                ["Authenticated"] = HttpContext.User.Identity.IsAuthenticated,
+                //["Authenticated"] = HttpContext.User.Identity.IsAuthenticated,
                 ["Auth Type"] = HttpContext.User.Identity.AuthenticationType,
-                ["In Users Role"] = HttpContext.User.IsInRole("Users"),
-                ["City"] = CurrentUser.Result.City,
-                ["Qualification"] = CurrentUser.Result.Qualifications
+                ["Is Employees Role"] = HttpContext.User.IsInRole("Employees"),
+                //["City"] = CurrentUser.Result.City,
+                //["Qualification"] = CurrentUser.Result.Qualifications
             };
         }
 
