@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TechnicalSafetyApplication.Models;
+using TechnicalSafetyApplication.Models.ViewModels;
 
 namespace TechnicalSafetyApplication.Controllers
 {
     public class ReplyController : Controller
     {
         private readonly AppIdentityDbContext _context;
+
+        private Application _application;
 
         public ReplyController(AppIdentityDbContext context)
         {
@@ -20,10 +23,21 @@ namespace TechnicalSafetyApplication.Controllers
 
 
         // GET: Reply
-        public async Task<IActionResult> Request(int applicationId)
+        public async Task<IActionResult> Request(int id)
         {
-            var appIdentityDbContext = _context.Replies.Include(r => r.User);
-            return View(await appIdentityDbContext.ToListAsync());
+            var application = _context.Claims.Single(x => x.Id == id);
+            application.CurrentStatus = Status.OnConsideration;
+            var request = new Reply();
+
+            var appRequest = new ApplicationRequestViewModel
+            {
+                Application = application,
+                Request = request
+            };
+
+            _application = application;
+
+            return View(appRequest);
         }
 
         // GET: Reply/Details/5
@@ -57,16 +71,19 @@ namespace TechnicalSafetyApplication.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Request([Bind("Id,Message,CreationTime,ModificationTime,UserId")] Reply reply)
+        public async Task<IActionResult> Request(ApplicationRequestViewModel applicationRequest)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && applicationRequest.Application != null)
             {
-                _context.Add(reply);
+                applicationRequest.Request.UserId = applicationRequest.Application.UserId;
+                applicationRequest.Application.CurrentStatus = Status.Processed;
+
+                _context.Add(applicationRequest.Request);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", reply.UserId);
-            return View(reply);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", applicationRequest.Request.UserId);
+            return View(applicationRequest.Request);
         }
 
         // GET: Reply/Edit/5

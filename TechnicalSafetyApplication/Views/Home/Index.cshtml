@@ -16,12 +16,12 @@
 {
     @if (User.IsInRole(Utility.ADMINS_ROLE) == false)
     {
-        <a asp-controller="Application" asp-action="Index" class="btn btn-danger">Your applications</a>
+        <a asp-controller="Application" asp-action="Index" class="btn btn-info">Your applications</a>
     }
     else    
     {
-        <a asp-controller="RoleAdmin" asp-action="Index" class="btn btn-warning">Roles</a>
-        <a asp-controller="Admin" asp-action="Index" class="btn btn-warning">Users</a>
+        <a asp-controller="RoleAdmin" asp-action="Index" class="btn btn-info">Roles</a>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-info">Users</a>
         <br /><br /><br />
     }
 

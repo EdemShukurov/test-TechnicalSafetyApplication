@@ -1,42 +1,78 @@
-﻿@model TechnicalSafetyApplication.Models.Reply
+﻿@model ApplicationRequestViewModel
 
 @{
     ViewData["Title"] = "Prepare your request";
 }
 
-    <h1>Request</h1>
+<h1>Request</h1>
 
-<h4>Request</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Request" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Message" class="control-label"></label>
-                <input asp-for="Message" class="form-control" />
-                <span asp-validation-for="Message" class="text-danger"></span>
+                <label asp-for="@Model.Request.Message" class="control-label"></label>
+                <input asp-for="@Model.Request.Message" class="form-control" />
+                <span asp-validation-for="@Model.Request.Message" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreationTime" class="control-label"></label>
-                <input asp-for="CreationTime" class="form-control" />
-                <span asp-validation-for="CreationTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModificationTime" class="control-label"></label>
-                <input asp-for="ModificationTime" class="form-control" />
-                <span asp-validation-for="ModificationTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Reply" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+
+
+<table class="table" name="Trouble">
+    <thead>
+        <tr>
+            <th>
+                Theme
+                @*@Html.DisplayNameFor(model => model.Message)*@
+            </th>
+            <th>
+                Message
+                @*@Html.DisplayNameFor(model => model.Theme)*@
+            </th>
+
+            <th>
+                Created at
+                @*@Html.DisplayNameFor(model => model.CreationTime)*@
+            </th>
+            <th>
+                Modified at
+                @*@Html.DisplayNameFor(model => model.ModificationTime)*@
+            </th>
+            <th>
+                File Name
+                @*@Html.DisplayNameFor(model => model.FileName)*@
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Application.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Application.Theme)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Application.CreationTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Application.ModificationTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Application.FileName)
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 
 <div>
     <a asp-action="Index">Back to List</a>
