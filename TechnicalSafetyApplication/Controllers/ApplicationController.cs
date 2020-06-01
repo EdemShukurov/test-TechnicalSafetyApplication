@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TechnicalSafetyApplication.Models;
+using TechnicalSafetyApplication.Models.ViewModels;
 
 namespace TechnicalSafetyApplication.Controllers
 {
@@ -27,7 +28,7 @@ namespace TechnicalSafetyApplication.Controllers
         }
 
         // GET: Application
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             var userId = new SqlParameter("@userId", User.FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -36,33 +37,38 @@ namespace TechnicalSafetyApplication.Controllers
                 return RedirectToAction("LogIn", "Account", new { area = "" });
             }
 
-
+            int pageSize = 3;
 
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             List<Application> list;
 
-            if(User.IsInRole("Managers"))
+            if(User.IsInRole(Utility.MANAGERS_ROLE))
             {
                 list = _context.Claims.ToList();
 
             }
-            else if(User.IsInRole("Employees"))
+            else
             {
                 list = _context.Claims.FromSqlRaw("EXECUTE GetApplicationsByUserId @userId", userId).ToList();
             }
-            else
-            {
-                list = null;
-            }
 
-           // var list2 = _context.Claims.Where(x => x.UserId == _userId).ToList();
-            
+
+            PageViewModel pageViewModel = new PageViewModel(list.Count, page, pageSize);
+            IndexViewModel viewModel = new IndexViewModel
+            {
+                PageViewModel = pageViewModel,
+                ApplicationsEnumerator = list.Skip((page - 1) * pageSize).Take(pageSize).ToList()
+            };
+
+            return View(viewModel);
+
+            // var list2 = _context.Claims.Where(x => x.UserId == _userId).ToList();
+
 
             //TODO: list ?
 
             var appIdentityDbContext = _context.Claims.Include(a => a.User);
-            return View(list);
         }
 
         // GET: Application/Details/5

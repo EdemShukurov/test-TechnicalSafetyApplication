@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TechnicalSafetyApplication.Models.Application>
+﻿@model IndexViewModel
 
 @{
     ViewData["Title"] = "Applications";
@@ -13,54 +13,90 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Message)
+                Message
+                @*@Html.DisplayNameFor(model => model.Message)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Theme)
+                Theme
+                @*@Html.DisplayNameFor(model => model.Theme)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CurrentStatus)
+                Current status
+                @*@Html.DisplayNameFor(model => model.CurrentStatus)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreationTime)
+                Created at
+                @*@Html.DisplayNameFor(model => model.CreationTime)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ModificationTime)
+                Modified at
+                @*@Html.DisplayNameFor(model => model.ModificationTime)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FileName)
+                File Name
+                @*@Html.DisplayNameFor(model => model.FileName)*@
             </th>
 
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Message)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Theme)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrentStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModificationTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FileName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.ApplicationsEnumerator)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Message)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Theme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurrentStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModificationTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileName)
+                </td>
+                <td>
+                    @if (User.IsInRole(Utility.EMPLOYEES_ROLE))
+                    {                        
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <h4>|</h4>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> <h4>|</h4>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Reply" asp-action="Request" asp-route-id="@item.Id">Reply</a>
+                    }
+
+
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       class="btn btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Previous
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       class="btn btn-outline-dark">
+        Next
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
