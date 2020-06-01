@@ -39,13 +39,18 @@
                 <span asp-validation-for="ModificationTime" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ApplicationFile" class="control-label"></label>
+                <input asp-for="ApplicationFile" />
+                <span asp-validation-for="ApplicationFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
                 <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReplyId" class="control-label"></label>
-                <select asp-for="ReplyId" class="form-control" asp-items="ViewBag.ReplyId"></select>
+                <input asp-for="ReplyId" class="form-control" />
                 <span asp-validation-for="ReplyId" class="text-danger"></span>
             </div>
             <div class="form-group">

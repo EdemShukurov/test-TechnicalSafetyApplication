@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<TechnicalSafetyApplication.Models.Application>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Applications";
 }
 
-<h1>Index</h1>
+<h1>Applications</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -26,6 +26,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ModificationTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FileName)
             </th>
 
             <th></th>
@@ -49,7 +52,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ModificationTime)
             </td>
-           
+            <td>
+                @Html.DisplayFor(modelItem => item.FileName)
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
