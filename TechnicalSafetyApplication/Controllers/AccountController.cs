@@ -51,11 +51,12 @@ namespace TechnicalSafetyApplication.Controllers
 
                         if (roles.Contains("Admins"))
                         {
-                            return Redirect(returnUrl ?? "/admin");
+                            return Redirect("/admin");
                         }
                         else
                         {
-                            return Redirect(returnUrl ?? "/application");
+                            
+                            return Redirect("/application");
                         }
                         
                     }
@@ -73,6 +74,25 @@ namespace TechnicalSafetyApplication.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(Index),"Home");
         }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Logout(string returnUrl)
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
+        //
+        // POST: /Account/LogOff
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogOff()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+
 
         [AllowAnonymous]
         public IActionResult AccessDenies()

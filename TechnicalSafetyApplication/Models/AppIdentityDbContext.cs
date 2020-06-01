@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace TechnicalSafetyApplication.Models
@@ -46,8 +47,7 @@ namespace TechnicalSafetyApplication.Models
             }
         }
 
-        public DbSet<Attachment> Attachments { get; set; }
-
+       
         public DbSet<Application> Claims { get; set; }
 
         public DbSet<Reply> Replies { get; set; }
